@@ -253,6 +253,29 @@
       animation: damageFloat 0.9s ease forwards;
     }
 
+    #healNumber {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      display: none;
+      transform: translateX(-50%);
+      color: #7dff91;
+      font-size: clamp(34px, 5vw, 80px);
+      font-weight: 900;
+      white-space: nowrap;
+      text-shadow:
+        -3px -3px 0 #075f17,
+        3px -3px 0 #075f17,
+        -3px 3px 0 #075f17,
+        3px 3px 0 #075f17,
+        0 0 14px #21ff53;
+    }
+
+    #healNumber.show {
+      display: block;
+      animation: damageFloat 0.9s ease forwards;
+    }
+
     @keyframes bossFloat {
       0%,
       100% {
@@ -324,7 +347,7 @@
       left: 50%;
       z-index: 25;
       display: none;
-      width: clamp(120px, 13vw, 210px);
+      width: clamp(140px, 15vw, 230px);
       transform: translateX(-50%);
       text-align: center;
     }
@@ -355,6 +378,30 @@
       color: #fff274;
       border-color: #fff274;
       font-size: clamp(13px, 1.1vw, 17px);
+    }
+
+    #healMultiplierNotice {
+      display: none;
+      width: max-content;
+      max-width: 90vw;
+      margin: 7px auto 0;
+      padding: 5px 10px;
+      border: 2px solid #ff5d5d;
+      border-radius: 8px;
+      color: #ff4b4b;
+      background: rgba(35, 0, 0, 0.86);
+      font-size: clamp(14px, 1.25vw, 19px);
+      font-weight: 900;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      text-shadow:
+        0 2px 2px black,
+        0 0 5px rgba(255, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(255, 45, 45, 0.35);
+    }
+
+    #healMultiplierNotice.show {
+      display: block;
     }
 
     @keyframes spiritAppear {
@@ -766,8 +813,17 @@
       }
 
       #spiritArea {
-        bottom: 155px;
-        width: 110px;
+        bottom: 150px;
+        width: 125px;
+      }
+
+      #spiritInfo {
+        padding: 5px 13px;
+      }
+
+      #healMultiplierNotice {
+        font-size: 11px;
+        padding: 4px 7px;
       }
 
       #reviveStatus {
@@ -795,6 +851,7 @@
 
     <div id="healthBarFrame">
       <div id="healthBar"></div>
+
       <div id="healthText">
         0 / 0 HP
       </div>
@@ -848,6 +905,10 @@
     <div id="damageNumber">
       -0
     </div>
+
+    <div id="healNumber">
+      +0
+    </div>
   </section>
 
   <!-- 抽到的精靈 -->
@@ -860,6 +921,10 @@
 
     <div id="spiritInfo">
       尚未抽取精靈
+    </div>
+
+    <div id="healMultiplierNotice">
+      補血時不記乘數
     </div>
   </section>
 
@@ -1110,6 +1175,9 @@
     const damageNumber =
       document.getElementById("damageNumber");
 
+    const healNumber =
+      document.getElementById("healNumber");
+
     const spiritArea =
       document.getElementById("spiritArea");
 
@@ -1118,6 +1186,11 @@
 
     const spiritInfo =
       document.getElementById("spiritInfo");
+
+    const healMultiplierNotice =
+      document.getElementById(
+        "healMultiplierNotice"
+      );
 
     const throwButton =
       document.getElementById("throwButton");
@@ -1304,18 +1377,19 @@
         "waiting"
       );
 
-      /*
-        精靈圖片下方只顯示倍率。
-      */
       spiritInfo.textContent =
         `×${spirit.multiplier}`;
+
+      healMultiplierNotice.classList.add(
+        "show"
+      );
 
       throwButton.disabled = true;
 
       enableNumberControls();
 
       actionHint.textContent =
-        `已抽取 ×${spirit.multiplier}，請選擇＋或－`;
+        `攻擊 ×${spirit.multiplier}｜補血固定 ×1`;
 
       actionHint.classList.add(
         "ready"
@@ -1358,6 +1432,10 @@
 
       spiritInfo.textContent =
         "請重新抽取";
+
+      healMultiplierNotice.classList.remove(
+        "show"
+      );
 
       actionHint.textContent =
         "請重新抽取精靈";
@@ -1494,6 +1572,7 @@
 
     /* =========================
        加號：補回 Boss 血量
+       補血固定使用 1 倍
     ========================= */
 
     additionButton.addEventListener(
@@ -1513,19 +1592,19 @@
         return;
       }
 
-      const baseHeal =
+      /*
+        補血不使用精靈倍率。
+
+        輸入 5 就補 5。
+        輸入 10 就補 10。
+        無論抽到 ×1、×1.5、×2 或 ×3，
+        補血一律按照 ×1 計算。
+      */
+      const finalHeal =
         getInputAmount();
 
-      const multiplier =
-        gameState.selectedSpirit
-          .multiplier;
-
-      const finalHeal = Math.max(
-        1,
-        Math.round(
-          baseHeal * multiplier
-        )
-      );
+      const previousHP =
+        gameState.currentHP;
 
       gameState.currentHP = Math.min(
         gameState.maxHP,
@@ -1533,8 +1612,43 @@
           finalHeal
       );
 
+      /*
+        實際補血量。
+
+        例如 Boss 目前 38 / 40，
+        玩家輸入 10，
+        實際只會補 2。
+      */
+      const actualHeal =
+        gameState.currentHP -
+        previousHP;
+
       updateHealthBar();
+
+      showHealNumber(actualHeal);
+
       consumeSpirit();
+    }
+
+    function showHealNumber(healAmount) {
+      healNumber.textContent =
+        `+${healAmount} ×1`;
+
+      healNumber.classList.remove(
+        "show"
+      );
+
+      void healNumber.offsetWidth;
+
+      healNumber.classList.add(
+        "show"
+      );
+
+      window.setTimeout(() => {
+        healNumber.classList.remove(
+          "show"
+        );
+      }, 900);
     }
 
     /* =========================
@@ -1615,6 +1729,10 @@
 
       disableNumberControls();
 
+      healMultiplierNotice.classList.remove(
+        "show"
+      );
+
       actionHint.textContent =
         "BOSS 血量歸零";
 
@@ -1671,6 +1789,10 @@
 
       spiritInfo.textContent =
         "請重新抽取";
+
+      healMultiplierNotice.classList.remove(
+        "show"
+      );
 
       actionHint.textContent =
         "請先抽取精靈";
