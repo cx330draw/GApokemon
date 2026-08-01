@@ -2,12 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>精靈 Boss 挑戰</title>
 
   <style>
@@ -55,10 +50,6 @@
       pointer-events: none;
     }
 
-    /* =========================
-       初始提示
-    ========================= */
-
     #startHint {
       position: fixed;
       top: 50%;
@@ -80,10 +71,6 @@
       white-space: nowrap;
     }
 
-    /* =========================
-       難度按鈕
-    ========================= */
-
     #difficultyPanel {
       position: fixed;
       top: 24px;
@@ -96,9 +83,7 @@
 
     .difficulty-button {
       width: clamp(120px, 12vw, 190px);
-      transition:
-        transform 0.18s ease,
-        filter 0.18s ease;
+      transition: transform 0.18s ease, filter 0.18s ease;
     }
 
     .difficulty-button:hover:not(:disabled) {
@@ -112,10 +97,6 @@
         brightness(1.15)
         drop-shadow(0 0 12px rgba(255, 255, 255, 0.95));
     }
-
-    /* =========================
-       Boss 血條
-    ========================= */
 
     #bossHud {
       position: fixed;
@@ -188,10 +169,6 @@
         2px 2px 0 black;
     }
 
-    /* =========================
-       Boss
-    ========================= */
-
     #bossArea {
       position: fixed;
       top: calc(51% - 20px);
@@ -205,7 +182,6 @@
 
     #bossImage {
       --boss-scale: 1;
-
       width: 100%;
       max-height: 55vh;
       object-fit: contain;
@@ -214,32 +190,29 @@
       animation: bossFloat 2.5s ease-in-out infinite;
     }
 
-    #bossImage.boss-low {
-      --boss-scale: 1;
-    }
-
-    #bossImage.boss-mid {
-      --boss-scale: 1.1;
-    }
-
-    #bossImage.boss-high {
-      --boss-scale: 1.3;
-    }
+    #bossImage.boss-low { --boss-scale: 1; }
+    #bossImage.boss-mid { --boss-scale: 1.1; }
+    #bossImage.boss-high { --boss-scale: 1.3; }
 
     #bossArea.hit {
       animation: bossHit 0.35s ease;
     }
 
-    #damageNumber {
+    #damageNumber,
+    #healNumber {
       position: absolute;
       top: 20%;
       left: 50%;
+      z-index: 15;
       display: none;
       transform: translateX(-50%);
-      color: #fff65b;
       font-size: clamp(34px, 5vw, 80px);
       font-weight: 900;
       white-space: nowrap;
+    }
+
+    #damageNumber {
+      color: #fff65b;
       text-shadow:
         -3px -3px 0 #9c0000,
         3px -3px 0 #9c0000,
@@ -248,21 +221,8 @@
         0 0 14px #ff3b00;
     }
 
-    #damageNumber.show {
-      display: block;
-      animation: damageFloat 0.9s ease forwards;
-    }
-
     #healNumber {
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      display: none;
-      transform: translateX(-50%);
       color: #7dff91;
-      font-size: clamp(34px, 5vw, 80px);
-      font-weight: 900;
-      white-space: nowrap;
       text-shadow:
         -3px -3px 0 #075f17,
         3px -3px 0 #075f17,
@@ -271,56 +231,32 @@
         0 0 14px #21ff53;
     }
 
+    #damageNumber.show,
     #healNumber.show {
       display: block;
-      animation: damageFloat 0.9s ease forwards;
+      animation: numberFloat 0.9s ease forwards;
     }
 
     @keyframes bossFloat {
-      0%,
-      100% {
-        transform:
-          translateY(-12px)
-          scale(var(--boss-scale));
+      0%, 100% {
+        transform: translateY(-12px) scale(var(--boss-scale));
       }
 
       50% {
-        transform:
-          translateY(12px)
-          scale(var(--boss-scale));
+        transform: translateY(12px) scale(var(--boss-scale));
       }
     }
 
     @keyframes bossHit {
-      0% {
-        margin-left: 0;
-        filter: brightness(1);
-      }
-
-      20% {
-        margin-left: -20px;
-        filter: brightness(2.4);
-      }
-
-      40% {
-        margin-left: 20px;
-      }
-
-      60% {
-        margin-left: -12px;
-      }
-
-      80% {
-        margin-left: 8px;
-      }
-
-      100% {
-        margin-left: 0;
-        filter: brightness(1);
-      }
+      0% { margin-left: 0; filter: brightness(1); }
+      20% { margin-left: -20px; filter: brightness(2.4); }
+      40% { margin-left: 20px; }
+      60% { margin-left: -12px; }
+      80% { margin-left: 8px; }
+      100% { margin-left: 0; filter: brightness(1); }
     }
 
-    @keyframes damageFloat {
+    @keyframes numberFloat {
       0% {
         opacity: 0;
         transform: translate(-50%, 25px) scale(0.6);
@@ -337,10 +273,6 @@
       }
     }
 
-    /* =========================
-       精靈顯示
-    ========================= */
-
     #spiritArea {
       position: fixed;
       bottom: 24px;
@@ -356,11 +288,14 @@
       width: 100%;
       max-height: 26vh;
       object-fit: contain;
+      transform-origin: center bottom;
       filter: drop-shadow(0 8px 7px rgba(0, 0, 0, 0.45));
       animation: spiritAppear 0.55s cubic-bezier(0.2, 1.5, 0.5, 1);
     }
 
     #spiritInfo {
+      position: relative;
+      z-index: 5;
       display: inline-block;
       margin-top: 5px;
       padding: 7px 18px;
@@ -380,30 +315,6 @@
       font-size: clamp(13px, 1.1vw, 17px);
     }
 
-    #healMultiplierNotice {
-      display: none;
-      width: max-content;
-      max-width: 90vw;
-      margin: 7px auto 0;
-      padding: 5px 10px;
-      border: 2px solid #ff5d5d;
-      border-radius: 8px;
-      color: #ff4b4b;
-      background: rgba(35, 0, 0, 0.86);
-      font-size: clamp(14px, 1.25vw, 19px);
-      font-weight: 900;
-      letter-spacing: 1px;
-      white-space: nowrap;
-      text-shadow:
-        0 2px 2px black,
-        0 0 5px rgba(255, 0, 0, 0.5);
-      box-shadow: 0 0 10px rgba(255, 45, 45, 0.35);
-    }
-
-    #healMultiplierNotice.show {
-      display: block;
-    }
-
     @keyframes spiritAppear {
       0% {
         opacity: 0;
@@ -416,16 +327,10 @@
       }
     }
 
-    /* =========================
-       共用功能按鈕
-    ========================= */
-
     .action-button {
       position: relative;
       width: clamp(135px, 13vw, 210px);
-      transition:
-        transform 0.18s ease,
-        filter 0.18s ease;
+      transition: transform 0.18s ease, filter 0.18s ease;
     }
 
     .action-button:hover:not(:disabled) {
@@ -438,10 +343,6 @@
         grayscale(0.55)
         drop-shadow(0 0 8px rgba(255, 230, 70, 0.8));
     }
-
-    /* =========================
-       右下角：精靈與加減控制
-    ========================= */
 
     #rightControlPanel {
       position: fixed;
@@ -458,7 +359,7 @@
       transform: translateX(-7px) scale(1.04);
     }
 
-    #numberPanel {
+    #attackPanel {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -469,27 +370,15 @@
       box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
     }
 
-    .number-button {
-      width: clamp(55px, 5vw, 78px);
-      transition:
-        transform 0.15s ease,
-        filter 0.15s ease;
-    }
-
-    .number-button:hover:not(:disabled) {
-      transform: scale(1.1);
-      filter: brightness(1.2);
-    }
-
     #amountInput {
-      width: clamp(82px, 8vw, 120px);
-      height: clamp(50px, 5vw, 68px);
+      width: clamp(95px, 9vw, 135px);
+      height: clamp(54px, 5vw, 72px);
       border: 3px solid white;
       border-radius: 12px;
       outline: none;
       color: #182238;
       background: rgba(255, 255, 255, 0.97);
-      font-size: clamp(21px, 2.2vw, 34px);
+      font-size: clamp(22px, 2.3vw, 36px);
       font-weight: 900;
       text-align: center;
       box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.25);
@@ -504,6 +393,16 @@
     #amountInput::-webkit-outer-spin-button {
       appearance: none;
       margin: 0;
+    }
+
+    #attackButton {
+      width: clamp(80px, 7vw, 112px);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    #attackButton:hover:not(:disabled) {
+      transform: scale(1.08);
+      filter: brightness(1.18);
     }
 
     #actionHint {
@@ -521,10 +420,6 @@
     #actionHint.ready {
       color: #82ff96;
     }
-
-    /* =========================
-       左下角：重生與規則
-    ========================= */
 
     #leftActionPanel {
       position: fixed;
@@ -555,24 +450,125 @@
       white-space: nowrap;
     }
 
-    /* =========================
-       規則視窗
-    ========================= */
-
+    #bagModal,
     #ruleModal {
       position: fixed;
       inset: 0;
-      z-index: 100;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 30px;
+      padding: 25px;
       background: rgba(0, 0, 0, 0.72);
       backdrop-filter: blur(5px);
     }
 
+    #bagModal { z-index: 110; }
+    #ruleModal { z-index: 100; }
+
+    #bagModal.open,
     #ruleModal.open {
       display: flex;
+    }
+
+    #bagWindow {
+      position: relative;
+      width: min(900px, 92vw);
+      min-height: min(620px, 85vh);
+      max-height: 88vh;
+      overflow: hidden;
+      border-radius: 24px;
+      background: url("bag_open.png") center / 100% 100% no-repeat;
+      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.65));
+      animation: modalAppear 0.3s ease;
+    }
+
+    #bagItems {
+      position: absolute;
+      top: 22%;
+      right: 10%;
+      bottom: 17%;
+      left: 10%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: clamp(18px, 2.2vw, 32px);
+      align-items: center;
+    }
+
+    .bag-item {
+      position: relative;
+      display: flex;
+      min-height: 210px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      padding: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.82);
+      border-radius: 20px;
+      background: rgba(16, 27, 48, 0.78);
+      box-shadow:
+        inset 0 0 16px rgba(255, 255, 255, 0.08),
+        0 8px 15px rgba(0, 0, 0, 0.3);
+      transition:
+        transform 0.17s ease,
+        filter 0.17s ease,
+        border-color 0.17s ease;
+    }
+
+    .bag-item:hover:not(:disabled) {
+      transform: translateY(-5px) scale(1.03);
+      border-color: #fff06a;
+      filter: brightness(1.15);
+    }
+
+    .bag-item-image {
+      width: clamp(90px, 10vw, 145px);
+      height: clamp(90px, 10vw, 145px);
+      object-fit: contain;
+      filter: drop-shadow(0 6px 7px rgba(0, 0, 0, 0.42));
+    }
+
+    .bag-item-heal {
+      color: #8cff9b;
+      font-size: clamp(19px, 1.8vw, 27px);
+      font-weight: 900;
+      text-shadow: 0 2px 3px black;
+    }
+
+    .bag-item-quantity {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      min-width: 48px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: white;
+      background: rgba(0, 0, 0, 0.76);
+      font-size: 18px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    #closeBag,
+    #closeRule {
+      position: absolute;
+      z-index: 5;
+      width: 52px;
+      height: 52px;
+      border: 3px solid white;
+      border-radius: 50%;
+      color: white;
+      background: #d72c2c;
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 46px;
+      text-align: center;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45);
+    }
+
+    #closeBag {
+      top: 20px;
+      right: 22px;
     }
 
     #ruleWindow {
@@ -590,22 +586,101 @@
     }
 
     #closeRule {
-      position: absolute;
       top: -18px;
       right: -18px;
-      width: 50px;
-      height: 50px;
-      border: 3px solid white;
-      border-radius: 50%;
-      color: white;
-      background: #d72c2c;
-      font-size: 29px;
-      font-weight: 900;
-      line-height: 44px;
+    }
+
+    #itemConfirmModal {
+      position: fixed;
+      inset: 0;
+      z-index: 130;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.62);
+    }
+
+    #itemConfirmModal.open {
+      display: flex;
+    }
+
+    #itemConfirmWindow {
+      width: min(430px, 88vw);
+      padding: 28px 25px 24px;
+      border: 4px solid white;
+      border-radius: 22px;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(42, 67, 103, 0.98),
+          rgba(12, 25, 48, 0.98)
+        );
+      box-shadow:
+        0 18px 35px rgba(0, 0, 0, 0.55),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
       text-align: center;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45);
-      cursor: pointer;
-      pointer-events: auto;
+      animation: confirmAppear 0.25s ease;
+    }
+
+    #confirmItemImage {
+      width: 105px;
+      height: 105px;
+      margin: 0 auto 12px;
+      object-fit: contain;
+      filter: drop-shadow(0 7px 8px rgba(0, 0, 0, 0.5));
+    }
+
+    #confirmText {
+      color: white;
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 900;
+      line-height: 1.6;
+      text-shadow: 0 2px 3px black;
+    }
+
+    #confirmHealText {
+      color: #89ff9b;
+      font-size: clamp(24px, 2.5vw, 36px);
+      font-weight: 900;
+    }
+
+    #confirmButtons {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .confirm-button {
+      min-width: 120px;
+      padding: 11px 25px;
+      border: 3px solid white;
+      border-radius: 13px;
+      color: white;
+      font-size: 21px;
+      font-weight: 900;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.35);
+      transition: transform 0.15s ease;
+    }
+
+    .confirm-button:hover {
+      transform: translateY(-2px) scale(1.04);
+    }
+
+    #confirmYes { background: #269446; }
+    #confirmNo { background: #b83131; }
+
+    @keyframes confirmAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.75);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     @keyframes modalAppear {
@@ -619,10 +694,6 @@
         transform: scale(1);
       }
     }
-
-    /* =========================
-       重生提示
-    ========================= */
 
     #reviveMessage {
       position: fixed;
@@ -671,10 +742,6 @@
       }
     }
 
-    /* =========================
-       Ending
-    ========================= */
-
     #endingScreen {
       position: fixed;
       inset: 0;
@@ -721,28 +788,14 @@
     }
 
     @keyframes endingFade {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes endingPulse {
-      from {
-        transform: scale(0.94);
-      }
-
-      to {
-        transform: scale(1.05);
-      }
+      from { transform: scale(0.94); }
+      to { transform: scale(1.05); }
     }
-
-    /* =========================
-       彩帶
-    ========================= */
 
     #confettiCanvas {
       position: fixed;
@@ -753,10 +806,6 @@
       height: 100%;
       pointer-events: none;
     }
-
-    /* =========================
-       手機版
-    ========================= */
 
     @media (max-width: 760px) {
       #difficultyPanel {
@@ -777,7 +826,6 @@
       }
 
       #bossArea {
-        top: calc(51% - 20px);
         width: min(360px, 65vw);
       }
 
@@ -794,36 +842,27 @@
       }
 
       .action-button {
-        width: 108px;
+        width: 105px;
       }
 
-      #numberPanel {
-        gap: 4px;
-        padding: 6px;
-      }
-
-      .number-button {
-        width: 44px;
+      #attackPanel {
+        gap: 5px;
+        padding: 7px;
       }
 
       #amountInput {
-        width: 62px;
-        height: 44px;
-        font-size: 21px;
+        width: 72px;
+        height: 48px;
+        font-size: 22px;
+      }
+
+      #attackButton {
+        width: 55px;
       }
 
       #spiritArea {
-        bottom: 150px;
+        bottom: 145px;
         width: 125px;
-      }
-
-      #spiritInfo {
-        padding: 5px 13px;
-      }
-
-      #healMultiplierNotice {
-        font-size: 11px;
-        padding: 4px 7px;
       }
 
       #reviveStatus {
@@ -833,132 +872,79 @@
       #actionHint {
         font-size: 11px;
       }
+
+      #bagWindow {
+        min-height: 76vh;
+      }
+
+      #bagItems {
+        top: 15%;
+        right: 7%;
+        bottom: 10%;
+        left: 7%;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        overflow-y: auto;
+      }
+
+      .bag-item {
+        min-height: 135px;
+        padding: 10px;
+      }
+
+      .bag-item-image {
+        width: 70px;
+        height: 70px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- 初始提示 -->
-  <div id="startHint">
-    請先選擇右上角難度
-  </div>
+  <div id="startHint">請先選擇右上角難度</div>
 
-  <!-- Boss 血條 -->
   <section id="bossHud">
-    <div id="bossTitle">
-      BOSS
-    </div>
+    <div id="bossTitle">BOSS</div>
 
     <div id="healthBarFrame">
       <div id="healthBar"></div>
-
-      <div id="healthText">
-        0 / 0 HP
-      </div>
+      <div id="healthText">0 / 0 HP</div>
     </div>
   </section>
 
-  <!-- 難度選擇 -->
   <section id="difficultyPanel">
-    <button
-      class="difficulty-button"
-      data-difficulty="low"
-      aria-label="初級"
-    >
-      <img
-        src="low.png"
-        alt="初級"
-      />
+    <button class="difficulty-button" data-difficulty="low" aria-label="初級">
+      <img src="low.png" alt="初級" />
     </button>
 
-    <button
-      class="difficulty-button"
-      data-difficulty="mid"
-      aria-label="中級"
-    >
-      <img
-        src="mid.png"
-        alt="中級"
-      />
+    <button class="difficulty-button" data-difficulty="mid" aria-label="中級">
+      <img src="mid.png" alt="中級" />
     </button>
 
-    <button
-      class="difficulty-button"
-      data-difficulty="high"
-      aria-label="高級"
-    >
-      <img
-        src="high.png"
-        alt="高級"
-      />
+    <button class="difficulty-button" data-difficulty="high" aria-label="高級">
+      <img src="high.png" alt="高級" />
     </button>
   </section>
 
-  <!-- Boss -->
   <section id="bossArea">
-    <img
-      id="bossImage"
-      src=""
-      alt="Boss"
-    />
-
-    <div id="damageNumber">
-      -0
-    </div>
-
-    <div id="healNumber">
-      +0
-    </div>
+    <img id="bossImage" src="" alt="Boss" />
+    <div id="damageNumber">-0</div>
+    <div id="healNumber">+0</div>
   </section>
 
-  <!-- 抽到的精靈 -->
   <section id="spiritArea">
-    <img
-      id="spiritImage"
-      src=""
-      alt="抽到的精靈"
-    />
-
-    <div id="spiritInfo">
-      尚未抽取精靈
-    </div>
-
-    <div id="healMultiplierNotice">
-      補血時不記乘數
-    </div>
+    <img id="spiritImage" src="" alt="抽到的精靈" />
+    <div id="spiritInfo">尚未抽取精靈</div>
   </section>
 
-  <!-- 右下角：精靈與加減控制 -->
   <section id="rightControlPanel">
-    <button
-      id="throwButton"
-      class="action-button"
-      aria-label="抽取精靈"
-      disabled
-    >
-      <img
-        src="throw.png"
-        alt="精靈"
-      />
+    <button id="throwButton" class="action-button" aria-label="抽取精靈" disabled>
+      <img src="throw.png" alt="精靈" />
     </button>
 
-    <div id="actionHint">
-      請先抽取精靈
-    </div>
+    <div id="actionHint">請先輸入傷害，再抽取精靈</div>
 
-    <div id="numberPanel">
-      <button
-        id="subtractButton"
-        class="number-button"
-        aria-label="攻擊 Boss"
-        disabled
-      >
-        <img
-          src="subtract.png"
-          alt="減少"
-        />
-      </button>
-
+    <div id="attackPanel">
       <input
         id="amountInput"
         type="number"
@@ -966,86 +952,67 @@
         step="1"
         value="1"
         inputmode="numeric"
-        aria-label="輸入數字"
+        aria-label="輸入基礎傷害"
         disabled
       />
 
-      <button
-        id="additionButton"
-        class="number-button"
-        aria-label="補充 Boss 血量"
-        disabled
-      >
-        <img
-          src="addition.png"
-          alt="增加"
-        />
+      <button id="attackButton" aria-label="攻擊 Boss" disabled>
+        <img src="attack.png" alt="攻擊" />
       </button>
     </div>
   </section>
 
-  <!-- 左下角：重生與規則 -->
   <section id="leftActionPanel">
-    <button
-      id="reviveButton"
-      class="action-button"
-      aria-label="啟動重生"
-      disabled
-    >
-      <img
-        src="skill.png"
-        alt="重生"
-      />
-
-      <span id="reviveStatus">
-        可使用一次
-      </span>
+    <button id="reviveButton" class="action-button" aria-label="啟動重生" disabled>
+      <img src="skill.png" alt="重生" />
+      <span id="reviveStatus">可使用一次</span>
     </button>
 
-    <button
-      id="ruleButton"
-      class="action-button"
-      aria-label="查看規則"
-    >
-      <img
-        src="rule.png"
-        alt="規則"
-      />
+    <button id="bagButton" class="action-button" aria-label="開啟背包" disabled>
+      <img src="bag.png" alt="背包" />
+    </button>
+
+    <button id="ruleButton" class="action-button" aria-label="查看規則">
+      <img src="rule.png" alt="規則" />
     </button>
   </section>
 
-  <!-- 規則視窗 -->
+  <section id="bagModal">
+    <div id="bagWindow">
+      <button id="closeBag" aria-label="關閉背包">×</button>
+      <div id="bagItems"></div>
+    </div>
+  </section>
+
+  <section id="itemConfirmModal">
+    <div id="itemConfirmWindow">
+      <img id="confirmItemImage" src="" alt="補血道具" />
+
+      <div id="confirmText">
+        使用此道具會補充
+        <div id="confirmHealText">+0 HP</div>
+        是否確定使用？
+      </div>
+
+      <div id="confirmButtons">
+        <button id="confirmYes" class="confirm-button">是</button>
+        <button id="confirmNo" class="confirm-button">否</button>
+      </div>
+    </div>
+  </section>
+
   <section id="ruleModal">
     <div id="ruleWindow">
-      <img
-        id="ruleImage"
-        src="note.png"
-        alt="遊戲規則"
-      />
-
-      <button
-        id="closeRule"
-        aria-label="關閉規則"
-      >
-        ×
-      </button>
+      <img id="ruleImage" src="note.png" alt="遊戲規則" />
+      <button id="closeRule" aria-label="關閉規則">×</button>
     </div>
   </section>
 
-  <!-- 重生文字 -->
-  <div id="reviveMessage">
-    重生啟動
-  </div>
+  <div id="reviveMessage">重生啟動</div>
 
-  <!-- 結束畫面 -->
   <section id="endingScreen">
-    <div id="endingTitle">
-      ENDING
-    </div>
-
-    <div id="endingText">
-      BOSS 挑戰完成！
-    </div>
+    <div id="endingTitle">ENDING</div>
+    <div id="endingText">BOSS 挑戰完成！</div>
   </section>
 
   <canvas id="confettiCanvas"></canvas>
@@ -1053,23 +1020,17 @@
   <script>
     "use strict";
 
-    /* =========================
-       遊戲資料
-    ========================= */
-
     const difficulties = {
       low: {
         name: "初級 BOSS",
         maxHP: 40,
         bossImage: "boss_low.png"
       },
-
       mid: {
         name: "中級 BOSS",
         maxHP: 100,
         bossImage: "boss_mid.png"
       },
-
       high: {
         name: "高級 BOSS",
         maxHP: 150,
@@ -1078,414 +1039,201 @@
     };
 
     const spirits = [
-      {
-        image: "1.png",
-        multiplier: 3
-      },
-      {
-        image: "2.png",
-        multiplier: 2
-      },
-      {
-        image: "3.png",
-        multiplier: 2
-      },
-      {
-        image: "4.png",
-        multiplier: 1.5
-      },
-      {
-        image: "5.png",
-        multiplier: 1
-      },
-      {
-        image: "6.png",
-        multiplier: 1
-      },
-      {
-        image: "7.png",
-        multiplier: 1
-      },
-      {
-        image: "8.png",
-        multiplier: 1
-      },
-      {
-        image: "9.png",
-        multiplier: 1
-      },
-      {
-        image: "10.png",
-        multiplier: 1
-      }
+      { image: "1.png", multiplier: 3 },
+      { image: "2.png", multiplier: 2 },
+      { image: "3.png", multiplier: 2 },
+      { image: "4.png", multiplier: 1.5 },
+      { image: "5.png", multiplier: 1 },
+      { image: "6.png", multiplier: 1 },
+      { image: "7.png", multiplier: 1 },
+      { image: "8.png", multiplier: 1 },
+      { image: "9.png", multiplier: 1 },
+      { image: "10.png", multiplier: 1 }
     ];
 
-    /* =========================
-       遊戲狀態
-    ========================= */
+    const healingItems = [
+      {
+        id: "hpS",
+        image: "hp_S.png",
+        healAmount: 2,
+        quantity: 99
+      },
+      {
+        id: "hpM",
+        image: "hp_M.png",
+        healAmount: 3,
+        quantity: 99
+      },
+      {
+        id: "hpL",
+        image: "hp_L.png",
+        healAmount: 10,
+        quantity: 1
+      }
+    ];
 
     const gameState = {
       difficultySelected: false,
       difficulty: null,
-
       currentHP: 0,
       maxHP: 0,
-
       selectedSpirit: null,
       spiritReady: false,
-
       reviveReserved: false,
       reviveUsed: false,
       revivedBattle: false,
-
+      pendingHealingItem: null,
       gameEnded: false,
       actionLocked: false
     };
 
-    /* =========================
-       網頁元素
-    ========================= */
+    const startHint = document.getElementById("startHint");
+    const difficultyButtons = document.querySelectorAll(".difficulty-button");
+    const bossHud = document.getElementById("bossHud");
+    const bossTitle = document.getElementById("bossTitle");
+    const healthBar = document.getElementById("healthBar");
+    const healthText = document.getElementById("healthText");
+    const bossArea = document.getElementById("bossArea");
+    const bossImage = document.getElementById("bossImage");
+    const damageNumber = document.getElementById("damageNumber");
+    const healNumber = document.getElementById("healNumber");
+    const spiritArea = document.getElementById("spiritArea");
+    const spiritImage = document.getElementById("spiritImage");
+    const spiritInfo = document.getElementById("spiritInfo");
+    const throwButton = document.getElementById("throwButton");
+    const amountInput = document.getElementById("amountInput");
+    const attackButton = document.getElementById("attackButton");
+    const actionHint = document.getElementById("actionHint");
+    const reviveButton = document.getElementById("reviveButton");
+    const reviveStatus = document.getElementById("reviveStatus");
+    const bagButton = document.getElementById("bagButton");
+    const bagModal = document.getElementById("bagModal");
+    const bagItems = document.getElementById("bagItems");
+    const closeBag = document.getElementById("closeBag");
+    const itemConfirmModal = document.getElementById("itemConfirmModal");
+    const confirmItemImage = document.getElementById("confirmItemImage");
+    const confirmHealText = document.getElementById("confirmHealText");
+    const confirmYes = document.getElementById("confirmYes");
+    const confirmNo = document.getElementById("confirmNo");
+    const ruleButton = document.getElementById("ruleButton");
+    const ruleModal = document.getElementById("ruleModal");
+    const closeRule = document.getElementById("closeRule");
+    const reviveMessage = document.getElementById("reviveMessage");
+    const endingScreen = document.getElementById("endingScreen");
+    const confettiCanvas = document.getElementById("confettiCanvas");
+    const confettiContext = confettiCanvas.getContext("2d");
 
-    const startHint =
-      document.getElementById("startHint");
+    difficultyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        selectDifficulty(button.dataset.difficulty, button);
+      });
+    });
 
-    const difficultyButtons =
-      document.querySelectorAll(
-        ".difficulty-button"
-      );
-
-    const bossHud =
-      document.getElementById("bossHud");
-
-    const bossTitle =
-      document.getElementById("bossTitle");
-
-    const healthBar =
-      document.getElementById("healthBar");
-
-    const healthText =
-      document.getElementById("healthText");
-
-    const bossArea =
-      document.getElementById("bossArea");
-
-    const bossImage =
-      document.getElementById("bossImage");
-
-    const damageNumber =
-      document.getElementById("damageNumber");
-
-    const healNumber =
-      document.getElementById("healNumber");
-
-    const spiritArea =
-      document.getElementById("spiritArea");
-
-    const spiritImage =
-      document.getElementById("spiritImage");
-
-    const spiritInfo =
-      document.getElementById("spiritInfo");
-
-    const healMultiplierNotice =
-      document.getElementById(
-        "healMultiplierNotice"
-      );
-
-    const throwButton =
-      document.getElementById("throwButton");
-
-    const actionHint =
-      document.getElementById("actionHint");
-
-    const amountInput =
-      document.getElementById("amountInput");
-
-    const subtractButton =
-      document.getElementById(
-        "subtractButton"
-      );
-
-    const additionButton =
-      document.getElementById(
-        "additionButton"
-      );
-
-    const reviveButton =
-      document.getElementById(
-        "reviveButton"
-      );
-
-    const reviveStatus =
-      document.getElementById(
-        "reviveStatus"
-      );
-
-    const ruleButton =
-      document.getElementById("ruleButton");
-
-    const ruleModal =
-      document.getElementById("ruleModal");
-
-    const closeRule =
-      document.getElementById("closeRule");
-
-    const reviveMessage =
-      document.getElementById(
-        "reviveMessage"
-      );
-
-    const endingScreen =
-      document.getElementById(
-        "endingScreen"
-      );
-
-    const confettiCanvas =
-      document.getElementById(
-        "confettiCanvas"
-      );
-
-    const confettiContext =
-      confettiCanvas.getContext("2d");
-
-    /* =========================
-       選擇難度
-    ========================= */
-
-    difficultyButtons.forEach(
-      (button) => {
-        button.addEventListener(
-          "click",
-          () => {
-            selectDifficulty(
-              button.dataset.difficulty,
-              button
-            );
-          }
-        );
-      }
-    );
-
-    function selectDifficulty(
-      difficultyKey,
-      clickedButton
-    ) {
+    function selectDifficulty(difficultyKey, clickedButton) {
       if (gameState.difficultySelected) {
         return;
       }
 
-      const difficulty =
-        difficulties[difficultyKey];
+      const difficulty = difficulties[difficultyKey];
 
       if (!difficulty) {
         return;
       }
 
       gameState.difficultySelected = true;
-      gameState.difficulty =
-        difficultyKey;
+      gameState.difficulty = difficultyKey;
+      gameState.maxHP = difficulty.maxHP;
+      gameState.currentHP = difficulty.maxHP;
 
-      gameState.maxHP =
-        difficulty.maxHP;
+      bossTitle.textContent = difficulty.name;
+      bossImage.src = difficulty.bossImage;
 
-      gameState.currentHP =
-        difficulty.maxHP;
-
-      bossTitle.textContent =
-        difficulty.name;
-
-      bossImage.src =
-        difficulty.bossImage;
-
-      bossImage.classList.remove(
-        "boss-low",
-        "boss-mid",
-        "boss-high"
-      );
-
-      bossImage.classList.add(
-        `boss-${difficultyKey}`
-      );
+      bossImage.classList.remove("boss-low", "boss-mid", "boss-high");
+      bossImage.classList.add(`boss-${difficultyKey}`);
 
       startHint.style.display = "none";
       bossHud.style.display = "block";
       bossArea.style.display = "block";
 
-      difficultyButtons.forEach(
-        (button) => {
-          button.disabled = true;
-        }
-      );
+      difficultyButtons.forEach((button) => {
+        button.disabled = true;
+      });
 
-      clickedButton.classList.add(
-        "selected"
-      );
+      clickedButton.classList.add("selected");
 
+      amountInput.disabled = false;
       throwButton.disabled = false;
       reviveButton.disabled = false;
+      bagButton.disabled = false;
+      attackButton.disabled = true;
 
-      disableNumberControls();
+      actionHint.textContent = "請先輸入傷害，再抽取精靈";
+
       updateHealthBar();
+      renderInventory();
     }
 
-    /* =========================
-       精靈抽取
-    ========================= */
+    function getInputAmount() {
+      let amount = Number(amountInput.value);
 
-    throwButton.addEventListener(
-      "click",
-      drawSpirit
-    );
+      if (!Number.isFinite(amount) || amount <= 0) {
+        amount = 1;
+      }
+
+      amount = Math.floor(amount);
+      amountInput.value = amount;
+
+      return amount;
+    }
+
+    amountInput.addEventListener("input", () => {
+      if (Number(amountInput.value) < 1) {
+        amountInput.value = 1;
+      }
+    });
+
+    throwButton.addEventListener("click", drawSpirit);
 
     function drawSpirit() {
       if (
         !gameState.difficultySelected ||
         gameState.gameEnded ||
         gameState.actionLocked ||
-        gameState.currentHP <= 0
+        gameState.currentHP <= 0 ||
+        gameState.spiritReady
       ) {
         return;
       }
 
-      const randomIndex = Math.floor(
-        Math.random() * spirits.length
-      );
+      getInputAmount();
 
-      const spirit =
-        spirits[randomIndex];
+      const randomIndex = Math.floor(Math.random() * spirits.length);
+      const spirit = spirits[randomIndex];
 
-      gameState.selectedSpirit =
-        spirit;
-
+      gameState.selectedSpirit = spirit;
       gameState.spiritReady = true;
 
-      spiritArea.style.display =
-        "block";
+      spiritArea.style.display = "block";
 
-      spiritImage.style.animation =
-        "none";
-
+      spiritImage.style.animation = "none";
       void spiritImage.offsetWidth;
+      spiritImage.src = spirit.image;
+      spiritImage.style.animation = "";
 
-      spiritImage.style.animation =
-        "";
-
-      spiritImage.src =
-        spirit.image;
-
-      spiritInfo.classList.remove(
-        "waiting"
-      );
-
-      spiritInfo.textContent =
-        `×${spirit.multiplier}`;
-
-      healMultiplierNotice.classList.add(
-        "show"
-      );
+      spiritInfo.classList.remove("waiting");
+      spiritInfo.textContent = `×${spirit.multiplier}`;
 
       throwButton.disabled = true;
-
-      enableNumberControls();
-
-      actionHint.textContent =
-        `攻擊 ×${spirit.multiplier}｜補血固定 ×1`;
-
-      actionHint.classList.add(
-        "ready"
-      );
-    }
-
-    /* =========================
-       加減控制狀態
-    ========================= */
-
-    function enableNumberControls() {
-      amountInput.disabled = false;
-      subtractButton.disabled = false;
-      additionButton.disabled = false;
-    }
-
-    function disableNumberControls() {
+      attackButton.disabled = false;
       amountInput.disabled = true;
-      subtractButton.disabled = true;
-      additionButton.disabled = true;
-    }
-
-    function consumeSpirit() {
-      gameState.spiritReady = false;
-      gameState.selectedSpirit = null;
-
-      disableNumberControls();
-
-      if (
-        !gameState.gameEnded &&
-        !gameState.actionLocked &&
-        gameState.currentHP > 0
-      ) {
-        throwButton.disabled = false;
-      }
-
-      spiritInfo.classList.add(
-        "waiting"
-      );
-
-      spiritInfo.textContent =
-        "請重新抽取";
-
-      healMultiplierNotice.classList.remove(
-        "show"
-      );
 
       actionHint.textContent =
-        "請重新抽取精靈";
+        `已抽取 ×${spirit.multiplier}，請點擊攻擊`;
 
-      actionHint.classList.remove(
-        "ready"
-      );
+      actionHint.classList.add("ready");
     }
 
-    /* =========================
-       輸入數字
-    ========================= */
-
-    function getInputAmount() {
-      let amount =
-        Number(amountInput.value);
-
-      if (
-        !Number.isFinite(amount) ||
-        amount <= 0
-      ) {
-        amount = 1;
-      }
-
-      amount = Math.floor(amount);
-
-      amountInput.value = amount;
-
-      return amount;
-    }
-
-    amountInput.addEventListener(
-      "input",
-      () => {
-        if (
-          Number(amountInput.value) < 1
-        ) {
-          amountInput.value = 1;
-        }
-      }
-    );
-
-    /* =========================
-       減號：攻擊 Boss
-    ========================= */
-
-    subtractButton.addEventListener(
-      "click",
-      attackBoss
-    );
+    attackButton.addEventListener("click", attackBoss);
 
     function attackBoss() {
       if (
@@ -1499,34 +1247,22 @@
         return;
       }
 
-      const baseDamage =
-        getInputAmount();
-
-      const multiplier =
-        gameState.selectedSpirit
-          .multiplier;
+      const baseDamage = getInputAmount();
+      const multiplier = gameState.selectedSpirit.multiplier;
 
       const finalDamage = Math.max(
         1,
-        Math.round(
-          baseDamage * multiplier
-        )
+        Math.round(baseDamage * multiplier)
       );
 
       gameState.currentHP = Math.max(
         0,
-        gameState.currentHP -
-          finalDamage
+        gameState.currentHP - finalDamage
       );
 
       updateHealthBar();
       playBossHitAnimation();
-
-      showDamageNumber(
-        finalDamage,
-        multiplier
-      );
-
+      showDamageNumber(finalDamage, multiplier);
       consumeSpirit();
 
       if (gameState.currentHP <= 0) {
@@ -1534,11 +1270,33 @@
       }
     }
 
+    function consumeSpirit() {
+      gameState.spiritReady = false;
+      gameState.selectedSpirit = null;
+
+      attackButton.disabled = true;
+
+      if (
+        !gameState.gameEnded &&
+        !gameState.actionLocked &&
+        gameState.currentHP > 0
+      ) {
+        amountInput.disabled = false;
+        throwButton.disabled = false;
+      }
+
+      spiritInfo.classList.add("waiting");
+      spiritInfo.textContent = "請重新抽取";
+
+      actionHint.textContent =
+        "請輸入下一次傷害，再抽取精靈";
+
+      actionHint.classList.remove("ready");
+    }
+
     function playBossHitAnimation() {
       bossArea.classList.remove("hit");
-
       void bossArea.offsetWidth;
-
       bossArea.classList.add("hit");
 
       window.setTimeout(() => {
@@ -1546,140 +1304,194 @@
       }, 400);
     }
 
-    function showDamageNumber(
-      damage,
-      multiplier
-    ) {
-      damageNumber.textContent =
-        `-${damage} ×${multiplier}`;
+    function showDamageNumber(damage, multiplier) {
+      damageNumber.textContent = `-${damage} ×${multiplier}`;
 
-      damageNumber.classList.remove(
-        "show"
-      );
-
+      damageNumber.classList.remove("show");
       void damageNumber.offsetWidth;
-
-      damageNumber.classList.add(
-        "show"
-      );
+      damageNumber.classList.add("show");
 
       window.setTimeout(() => {
-        damageNumber.classList.remove(
-          "show"
-        );
+        damageNumber.classList.remove("show");
       }, 900);
     }
 
-    /* =========================
-       加號：補回 Boss 血量
-       補血固定使用 1 倍
-    ========================= */
+    bagButton.addEventListener("click", openBag);
+    closeBag.addEventListener("click", closeBagModal);
 
-    additionButton.addEventListener(
-      "click",
-      healBoss
-    );
+    bagModal.addEventListener("click", (event) => {
+      if (event.target === bagModal) {
+        closeBagModal();
+      }
+    });
 
-    function healBoss() {
+    function openBag() {
       if (
         !gameState.difficultySelected ||
         gameState.gameEnded ||
         gameState.actionLocked ||
-        gameState.currentHP <= 0 ||
-        !gameState.spiritReady ||
-        !gameState.selectedSpirit
+        gameState.currentHP <= 0
       ) {
         return;
       }
 
-      /*
-        補血不使用精靈倍率。
+      renderInventory();
+      bagModal.classList.add("open");
+    }
 
-        輸入 5 就補 5。
-        輸入 10 就補 10。
-        無論抽到 ×1、×1.5、×2 或 ×3，
-        補血一律按照 ×1 計算。
-      */
-      const finalHeal =
-        getInputAmount();
+    function closeBagModal() {
+      if (itemConfirmModal.classList.contains("open")) {
+        return;
+      }
 
-      const previousHP =
-        gameState.currentHP;
+      bagModal.classList.remove("open");
+    }
+
+    function renderInventory() {
+      bagItems.innerHTML = "";
+
+      healingItems.forEach((item) => {
+        const itemButton = document.createElement("button");
+
+        itemButton.type = "button";
+        itemButton.className = "bag-item";
+        itemButton.disabled = item.quantity <= 0;
+
+        itemButton.innerHTML = `
+          <img
+            class="bag-item-image"
+            src="${item.image}"
+            alt="補血道具"
+          />
+
+          <div class="bag-item-heal">
+            +${item.healAmount} HP
+          </div>
+
+          <div class="bag-item-quantity">
+            ×${item.quantity}
+          </div>
+        `;
+
+        itemButton.addEventListener("click", () => {
+          askUseHealingItem(item.id);
+        });
+
+        bagItems.appendChild(itemButton);
+      });
+    }
+
+    function askUseHealingItem(itemId) {
+      const item = healingItems.find(
+        (healingItem) => healingItem.id === itemId
+      );
+
+      if (
+        !item ||
+        item.quantity <= 0 ||
+        gameState.gameEnded ||
+        gameState.actionLocked ||
+        gameState.currentHP <= 0
+      ) {
+        return;
+      }
+
+      if (gameState.currentHP >= gameState.maxHP) {
+        window.alert("BOSS目前已經是滿血狀態。");
+        return;
+      }
+
+      gameState.pendingHealingItem = item;
+      confirmItemImage.src = item.image;
+      confirmHealText.textContent = `+${item.healAmount} HP`;
+
+      itemConfirmModal.classList.add("open");
+    }
+
+    confirmYes.addEventListener("click", confirmUseHealingItem);
+    confirmNo.addEventListener("click", cancelUseHealingItem);
+
+    itemConfirmModal.addEventListener("click", (event) => {
+      if (event.target === itemConfirmModal) {
+        cancelUseHealingItem();
+      }
+    });
+
+    function confirmUseHealingItem() {
+      const item = gameState.pendingHealingItem;
+
+      if (
+        !item ||
+        item.quantity <= 0 ||
+        gameState.gameEnded ||
+        gameState.actionLocked ||
+        gameState.currentHP <= 0
+      ) {
+        cancelUseHealingItem();
+        return;
+      }
+
+      if (gameState.currentHP >= gameState.maxHP) {
+        cancelUseHealingItem();
+        window.alert("BOSS目前已經是滿血狀態。");
+        return;
+      }
+
+      const previousHP = gameState.currentHP;
 
       gameState.currentHP = Math.min(
         gameState.maxHP,
-        gameState.currentHP +
-          finalHeal
+        gameState.currentHP + item.healAmount
       );
 
-      /*
-        實際補血量。
+      const actualHeal = gameState.currentHP - previousHP;
 
-        例如 Boss 目前 38 / 40，
-        玩家輸入 10，
-        實際只會補 2。
-      */
-      const actualHeal =
-        gameState.currentHP -
-        previousHP;
+      if (actualHeal > 0) {
+        item.quantity -= 1;
+      }
 
       updateHealthBar();
-
       showHealNumber(actualHeal);
+      renderInventory();
 
-      consumeSpirit();
+      gameState.pendingHealingItem = null;
+      itemConfirmModal.classList.remove("open");
+    }
+
+    function cancelUseHealingItem() {
+      gameState.pendingHealingItem = null;
+      itemConfirmModal.classList.remove("open");
     }
 
     function showHealNumber(healAmount) {
-      healNumber.textContent =
-        `+${healAmount} ×1`;
+      healNumber.textContent = `+${healAmount} HP`;
 
-      healNumber.classList.remove(
-        "show"
-      );
-
+      healNumber.classList.remove("show");
       void healNumber.offsetWidth;
-
-      healNumber.classList.add(
-        "show"
-      );
+      healNumber.classList.add("show");
 
       window.setTimeout(() => {
-        healNumber.classList.remove(
-          "show"
-        );
+        healNumber.classList.remove("show");
       }, 900);
     }
-
-    /* =========================
-       更新血條
-    ========================= */
 
     function updateHealthBar() {
       const percentage =
         gameState.maxHP > 0
-          ? (
-              gameState.currentHP /
-              gameState.maxHP
-            ) * 100
+          ? (gameState.currentHP / gameState.maxHP) * 100
           : 0;
 
-      healthBar.style.width =
-        `${percentage}%`;
+      healthBar.style.width = `${percentage}%`;
 
       healthText.textContent =
-        `${formatHP(
-          gameState.currentHP
-        )} / ${formatHP(
-          gameState.maxHP
-        )} HP`;
+        `${formatHP(gameState.currentHP)} / ` +
+        `${formatHP(gameState.maxHP)} HP`;
 
       if (percentage <= 25) {
         healthBar.style.filter =
           "brightness(0.82) saturate(1.25)";
       } else {
-        healthBar.style.filter =
-          "none";
+        healthBar.style.filter = "none";
       }
     }
 
@@ -1689,14 +1501,7 @@
         : value.toFixed(1);
     }
 
-    /* =========================
-       重生機制
-    ========================= */
-
-    reviveButton.addEventListener(
-      "click",
-      reserveRevive
-    );
+    reviveButton.addEventListener("click", reserveRevive);
 
     function reserveRevive() {
       if (
@@ -1711,13 +1516,8 @@
       gameState.reviveUsed = true;
 
       reviveButton.disabled = true;
-
-      reviveButton.classList.add(
-        "used"
-      );
-
-      reviveStatus.textContent =
-        "重生已準備";
+      reviveButton.classList.add("used");
+      reviveStatus.textContent = "重生已準備";
     }
 
     function handleBossDefeated() {
@@ -1725,37 +1525,26 @@
       gameState.spiritReady = false;
       gameState.selectedSpirit = null;
 
+      amountInput.disabled = true;
       throwButton.disabled = true;
+      attackButton.disabled = true;
+      bagButton.disabled = true;
 
-      disableNumberControls();
+      bagModal.classList.remove("open");
+      cancelUseHealingItem();
 
-      healMultiplierNotice.classList.remove(
-        "show"
-      );
-
-      actionHint.textContent =
-        "BOSS 血量歸零";
-
-      actionHint.classList.remove(
-        "ready"
-      );
+      actionHint.textContent = "BOSS 血量歸零";
+      actionHint.classList.remove("ready");
 
       if (
         gameState.reviveReserved &&
         !gameState.revivedBattle
       ) {
-        window.setTimeout(
-          startRevivedBattle,
-          650
-        );
-
+        window.setTimeout(startRevivedBattle, 650);
         return;
       }
 
-      window.setTimeout(
-        endGame,
-        650
-      );
+      window.setTimeout(endGame, 650);
     }
 
     function startRevivedBattle() {
@@ -1765,98 +1554,66 @@
       gameState.maxHP = 10;
       gameState.currentHP = 10;
 
-      bossTitle.textContent =
-        "重生 BOSS";
+      bossTitle.textContent = "重生 BOSS";
+      reviveStatus.textContent = "已使用";
 
-      reviveStatus.textContent =
-        "已使用";
-
-      reviveMessage.classList.remove(
-        "show"
-      );
-
+      reviveMessage.classList.remove("show");
       void reviveMessage.offsetWidth;
-
-      reviveMessage.classList.add(
-        "show"
-      );
+      reviveMessage.classList.add("show");
 
       updateHealthBar();
 
-      spiritInfo.classList.add(
-        "waiting"
-      );
-
-      spiritInfo.textContent =
-        "請重新抽取";
-
-      healMultiplierNotice.classList.remove(
-        "show"
-      );
+      spiritInfo.classList.add("waiting");
+      spiritInfo.textContent = "請重新抽取";
 
       actionHint.textContent =
-        "請先抽取精靈";
+        "請輸入傷害，再抽取精靈";
 
-      actionHint.classList.remove(
-        "ready"
-      );
+      actionHint.classList.remove("ready");
 
       window.setTimeout(() => {
         gameState.actionLocked = false;
 
+        amountInput.disabled = false;
         throwButton.disabled = false;
-
-        disableNumberControls();
+        attackButton.disabled = true;
+        bagButton.disabled = false;
       }, 1400);
     }
 
-    /* =========================
-       規則視窗
-    ========================= */
+    ruleButton.addEventListener("click", () => {
+      ruleModal.classList.add("open");
+    });
 
-    ruleButton.addEventListener(
-      "click",
-      () => {
-        ruleModal.classList.add(
-          "open"
-        );
+    closeRule.addEventListener("click", closeRuleModal);
+
+    ruleModal.addEventListener("click", (event) => {
+      if (event.target === ruleModal) {
+        closeRuleModal();
       }
-    );
-
-    closeRule.addEventListener(
-      "click",
-      closeRuleModal
-    );
-
-    ruleModal.addEventListener(
-      "click",
-      (event) => {
-        if (
-          event.target === ruleModal
-        ) {
-          closeRuleModal();
-        }
-      }
-    );
-
-    document.addEventListener(
-      "keydown",
-      (event) => {
-        if (event.key === "Escape") {
-          closeRuleModal();
-        }
-      }
-    );
+    });
 
     function closeRuleModal() {
-      ruleModal.classList.remove(
-        "open"
-      );
+      ruleModal.classList.remove("open");
     }
 
-    /* =========================
-       遊戲結束
-    ========================= */
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      if (itemConfirmModal.classList.contains("open")) {
+        cancelUseHealingItem();
+        return;
+      }
+
+      if (bagModal.classList.contains("open")) {
+        closeBagModal();
+        return;
+      }
+
+      closeRuleModal();
+    });
 
     function endGame() {
       if (gameState.gameEnded) {
@@ -1866,21 +1623,15 @@
       gameState.gameEnded = true;
       gameState.actionLocked = true;
 
+      amountInput.disabled = true;
       throwButton.disabled = true;
+      attackButton.disabled = true;
       reviveButton.disabled = true;
+      bagButton.disabled = true;
 
-      disableNumberControls();
-
-      endingScreen.classList.add(
-        "show"
-      );
-
+      endingScreen.classList.add("show");
       startConfetti();
     }
-
-    /* =========================
-       彩帶效果
-    ========================= */
 
     let confettiPieces = [];
     let confettiAnimationId = null;
@@ -1897,16 +1648,13 @@
     ];
 
     function resizeConfettiCanvas() {
-      const pixelRatio =
-        window.devicePixelRatio || 1;
+      const pixelRatio = window.devicePixelRatio || 1;
 
       confettiCanvas.width =
-        window.innerWidth *
-        pixelRatio;
+        window.innerWidth * pixelRatio;
 
       confettiCanvas.height =
-        window.innerHeight *
-        pixelRatio;
+        window.innerHeight * pixelRatio;
 
       confettiCanvas.style.width =
         `${window.innerWidth}px`;
@@ -1924,71 +1672,30 @@
       );
     }
 
-    window.addEventListener(
-      "resize",
-      resizeConfettiCanvas
-    );
+    window.addEventListener("resize", resizeConfettiCanvas);
 
-    function createConfettiPiece(
-      fromLeftSide
-    ) {
-      const startX =
-        fromLeftSide
-          ? Math.random() *
-            window.innerWidth *
-            0.25
-          : window.innerWidth -
-            Math.random() *
-            window.innerWidth *
-            0.25;
+    function createConfettiPiece(fromLeftSide) {
+      const startX = fromLeftSide
+        ? Math.random() * window.innerWidth * 0.25
+        : window.innerWidth -
+          Math.random() * window.innerWidth * 0.25;
 
       return {
         x: startX,
-
-        y:
-          window.innerHeight +
-          Math.random() * 80,
-
-        width:
-          7 + Math.random() * 10,
-
-        height:
-          12 + Math.random() * 17,
-
-        velocityX:
-          fromLeftSide
-            ? 3 + Math.random() * 8
-            : -(
-                3 +
-                Math.random() * 8
-              ),
-
-        velocityY:
-          -(
-            10 +
-            Math.random() * 15
-          ),
-
-        gravity:
-          0.18 +
-          Math.random() * 0.16,
-
-        rotation:
-          Math.random() *
-          Math.PI *
-          2,
-
-        rotationSpeed:
-          (
-            Math.random() -
-            0.5
-          ) * 0.32,
-
+        y: window.innerHeight + Math.random() * 80,
+        width: 7 + Math.random() * 10,
+        height: 12 + Math.random() * 17,
+        velocityX: fromLeftSide
+          ? 3 + Math.random() * 8
+          : -(3 + Math.random() * 8),
+        velocityY: -(10 + Math.random() * 15),
+        gravity: 0.18 + Math.random() * 0.16,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.32,
         color:
           confettiColors[
             Math.floor(
-              Math.random() *
-              confettiColors.length
+              Math.random() * confettiColors.length
             )
           ]
       };
@@ -1997,36 +1704,21 @@
     function startConfetti() {
       resizeConfettiCanvas();
 
-      confettiCanvas.style.display =
-        "block";
-
+      confettiCanvas.style.display = "block";
       confettiPieces = [];
-      confettiStartTime =
-        performance.now();
+      confettiStartTime = performance.now();
 
-      for (
-        let index = 0;
-        index < 260;
-        index += 1
-      ) {
+      for (let index = 0; index < 260; index += 1) {
         confettiPieces.push(
-          createConfettiPiece(
-            index % 2 === 0
-          )
+          createConfettiPiece(index % 2 === 0)
         );
       }
 
-      cancelAnimationFrame(
-        confettiAnimationId
-      );
-
+      cancelAnimationFrame(confettiAnimationId);
       animateConfetti();
     }
 
-    function animateConfetti(
-      currentTime =
-        performance.now()
-    ) {
+    function animateConfetti(currentTime = performance.now()) {
       confettiContext.clearRect(
         0,
         0,
@@ -2034,75 +1726,37 @@
         window.innerHeight
       );
 
-      confettiPieces.forEach(
-        (piece) => {
-          piece.velocityY +=
-            piece.gravity;
+      confettiPieces.forEach((piece) => {
+        piece.velocityY += piece.gravity;
+        piece.x += piece.velocityX;
+        piece.y += piece.velocityY;
+        piece.rotation += piece.rotationSpeed;
 
-          piece.x +=
-            piece.velocityX;
+        confettiContext.save();
+        confettiContext.translate(piece.x, piece.y);
+        confettiContext.rotate(piece.rotation);
+        confettiContext.fillStyle = piece.color;
 
-          piece.y +=
-            piece.velocityY;
+        confettiContext.fillRect(
+          -piece.width / 2,
+          -piece.height / 2,
+          piece.width,
+          piece.height
+        );
 
-          piece.rotation +=
-            piece.rotationSpeed;
+        confettiContext.restore();
 
-          confettiContext.save();
-
-          confettiContext.translate(
-            piece.x,
-            piece.y
-          );
-
-          confettiContext.rotate(
-            piece.rotation
-          );
-
-          confettiContext.fillStyle =
-            piece.color;
-
-          confettiContext.fillRect(
-            -piece.width / 2,
-            -piece.height / 2,
-            piece.width,
-            piece.height
-          );
-
-          confettiContext.restore();
-
-          if (
-            piece.y >
-            window.innerHeight + 50
-          ) {
-            piece.y = -30;
-
-            piece.x =
-              Math.random() *
-              window.innerWidth;
-
-            piece.velocityX =
-              (
-                Math.random() -
-                0.5
-              ) * 4;
-
-            piece.velocityY =
-              1 +
-              Math.random() * 4;
-          }
+        if (piece.y > window.innerHeight + 50) {
+          piece.y = -30;
+          piece.x = Math.random() * window.innerWidth;
+          piece.velocityX = (Math.random() - 0.5) * 4;
+          piece.velocityY = 1 + Math.random() * 4;
         }
-      );
+      });
 
-      if (
-        currentTime -
-          confettiStartTime <
-        7000
-      ) {
+      if (currentTime - confettiStartTime < 7000) {
         confettiAnimationId =
-          requestAnimationFrame(
-            animateConfetti
-          );
+          requestAnimationFrame(animateConfetti);
       } else {
         confettiContext.clearRect(
           0,
@@ -2111,8 +1765,7 @@
           window.innerHeight
         );
 
-        confettiCanvas.style.display =
-          "none";
+        confettiCanvas.style.display = "none";
       }
     }
   </script>
